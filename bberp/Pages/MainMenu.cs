@@ -212,14 +212,7 @@ namespace BBERP.Pages
             public const string ActionName = "Index";
         }
 
-        public static class UnitOfMeasure
-        {
-            public const string PageName = "Unit Of Measure";
-            public const string RoleName = "Unit Of Measure";
-            public const string Path = "/UnitOfMeasure/Index";
-            public const string ControllerName = "UnitOfMeasure";
-            public const string ActionName = "Index";
-        }
+       
 
         public static class VendorType
         {

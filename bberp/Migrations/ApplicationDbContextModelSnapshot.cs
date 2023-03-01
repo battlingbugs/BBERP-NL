@@ -396,7 +396,7 @@ namespace BBERP.Migrations
                     b.Property<string>("ProductName")
                         .IsRequired();
 
-                    b.Property<int>("UnitOfMeasureId");
+                    b.Property<decimal>("GrossWt");
 
                     b.HasKey("ProductId");
 
@@ -432,7 +432,7 @@ namespace BBERP.Migrations
 
                 b.Property<string>("MaterialImageUrl");
 
-                b.Property<int>("UnitOfMeasureId");
+                b.Property<decimal>("GrossWt");
 
                 b.Property<double>("DefaultBuyingPrice");
 
@@ -682,20 +682,7 @@ namespace BBERP.Migrations
                     b.ToTable("ShipmentType");
                 });
 
-            modelBuilder.Entity("BBERP.Models.UnitOfMeasure", b =>
-                {
-                    b.Property<int>("UnitOfMeasureId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("UnitOfMeasureName")
-                        .IsRequired();
-
-                    b.HasKey("UnitOfMeasureId");
-
-                    b.ToTable("UnitOfMeasure");
-                });
+            
 
             modelBuilder.Entity("BBERP.Models.UserProfile", b =>
                 {

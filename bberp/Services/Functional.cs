@@ -80,8 +80,8 @@ namespace BBERP.Services
                 await _context.ShipmentType.AddAsync(new ShipmentType { ShipmentTypeName = "Default" });
                 await _context.SaveChangesAsync();
 
-                await _context.UnitOfMeasure.AddAsync(new UnitOfMeasure { UnitOfMeasureName = "PCS" });
-                await _context.SaveChangesAsync();
+                //await _context.UnitOfMeasure.AddAsync(new UnitOfMeasure { UnitOfMeasureName = "PCS" });
+                //await _context.SaveChangesAsync();
 
                 await _context.ProductType.AddAsync(new ProductType { ProductTypeName = "Default" });
                 await _context.SaveChangesAsync();

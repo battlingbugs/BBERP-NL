@@ -16,7 +16,7 @@ namespace BBERP.Models
         public string Description { get; set; }
         public string ProductImageUrl { get; set; }
         [Display(Name = "UOM")]
-        public int UnitOfMeasureId { get; set; }
+        public decimal GrossWt { get; set; }
         public double DefaultBuyingPrice { get; set; } = 0.0;
         public double DefaultSellingPrice { get; set; } = 0.0;
         [Display(Name = "Branch")]

@@ -9,6 +9,10 @@ using BBERP.Data;
 using BBERP.Models;
 using BBERP.Models.SyncfusionViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using bberp.Data;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace BBERP.Controllers.Api
 {
@@ -18,17 +22,41 @@ namespace BBERP.Controllers.Api
     public class CustomerController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public CustomerController(ApplicationDbContext context)
+        private IConfiguration Configuration;
+        public string con = null;
+        SqlConnection conn;
+        public CustomerController(ApplicationDbContext context, IConfiguration _configuration)
         {
             _context = context;
+            Configuration = _configuration;
+            con = this.Configuration.GetConnectionString("DefaultConnection");
+            conn = new SqlConnection(con);
         }
 
         // GET: api/Customer
         [HttpGet]
         public async Task<IActionResult> GetCustomer()
         {
-            List<Customer> Items = await _context.Customer.ToListAsync();
+            DataTable dtcust = new DataTable();
+            dtcust = Common.ExecuteDataTableSqlDA(conn, CommandType.StoredProcedure, "IM_GetCust", null);
+            List<Customer> Items = new List<Customer>();
+            foreach (DataRow dc in dtcust.Rows)
+            {
+                Customer cust = new Customer();
+                cust.CustomerId =Convert.ToInt32(dc["CustomerId"]);
+                cust.Address = Convert.ToString(dc["Address"]);
+                cust.City = Convert.ToString(dc["City"]);
+                cust.ContactPerson = Convert.ToString(dc["ContactPerson"]);
+                cust.CustomerName = Convert.ToString(dc["CustomerName"]);
+                cust.CustomerTypeId = Convert.ToInt32(dc["CustomerTypeId"]);
+                cust.Email = Convert.ToString(dc["Email"]);
+                cust.Phone = Convert.ToString(dc["Phone"]);
+                cust.State = Convert.ToString(dc["State"]);
+                cust.ZipCode = Convert.ToString(dc["ZipCode"]);
+                Items.Add(cust);
+                
+            }
+
             int Count = Items.Count();
             return Ok(new { Items, Count });
         }

@@ -76,7 +76,7 @@ namespace BBERP.Data
 
         public DbSet<BBERP.Models.ShipmentType> ShipmentType { get; set; }
 
-        public DbSet<BBERP.Models.UnitOfMeasure> UnitOfMeasure { get; set; }
+       
 
         public DbSet<BBERP.Models.Vendor> Vendor { get; set; }
 

@@ -9,15 +9,22 @@ using BBERP.Data;
 using BBERP.Models;
 using BBERP.Models.SyncfusionViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using bberp.Data;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace BBERP.Controllers.Api
 {
     [Authorize]
     [Produces("application/json")]
-    [Route("api/Product")]
+    [Route("api/RawMaterial")]
     public class RawMaterialController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private IConfiguration Configuration;
+        public string con = null;
+        SqlConnection conn;
 
         public RawMaterialController(ApplicationDbContext context)
         {
@@ -28,7 +35,27 @@ namespace BBERP.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> GetRawMaterial()
         {
-            List<RawMaterial> Items = await _context.RawMaterial.ToListAsync();
+            //List<RawMaterial> Items = await _context.RawMaterial.ToListAsync();
+
+            DataTable dtRawMaterial = new DataTable();
+            dtRawMaterial = Common.ExecuteDataTableSqlDA(conn, CommandType.StoredProcedure, "IM_GetRawMaterial", null);
+            List<RawMaterial> Items = new List<RawMaterial>();
+            foreach (DataRow dc in dtRawMaterial.Rows)
+            {
+                RawMaterial prod = new RawMaterial();
+                prod.MaterialId = Convert.ToInt32(dc["MaterialId"]);
+                prod.MaterialName = Convert.ToString(dc["MaterialName"]);
+                prod.MaterialCode = Convert.ToString(dc["MaterialCode"]);
+                prod.Description = Convert.ToString(dc["Description"]);
+                prod.GrossWt = Convert.ToDecimal(dc["GrossWt"]);
+                prod.BranchId = Convert.ToInt32(dc["BranchId"]);
+                
+
+                Items.Add(prod);
+              
+
+    }
+
             int Count = Items.Count();
             return Ok(new { Items, Count });
         }

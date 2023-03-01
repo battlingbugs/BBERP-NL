@@ -311,7 +311,7 @@ namespace BBERP.Migrations
                     ProductCode = table.Column<string>(nullable: true),
                     ProductImageUrl = table.Column<string>(nullable: true),
                     ProductName = table.Column<string>(nullable: false),
-                    UnitOfMeasureId = table.Column<int>(nullable: false)
+                    GrossWt = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -445,19 +445,7 @@ namespace BBERP.Migrations
                     table.PrimaryKey("PK_ShipmentType", x => x.ShipmentTypeId);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UnitOfMeasure",
-                columns: table => new
-                {
-                    UnitOfMeasureId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    UnitOfMeasureName = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UnitOfMeasure", x => x.UnitOfMeasureId);
-                });
+            
 
             migrationBuilder.CreateTable(
                 name: "UserProfile",
@@ -830,8 +818,7 @@ namespace BBERP.Migrations
             migrationBuilder.DropTable(
                 name: "ShipmentType");
 
-            migrationBuilder.DropTable(
-                name: "UnitOfMeasure");
+           
 
             migrationBuilder.DropTable(
                 name: "UserProfile");

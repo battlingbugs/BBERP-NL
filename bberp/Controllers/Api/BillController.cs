@@ -10,6 +10,7 @@ using BBERP.Models;
 using BBERP.Services;
 using BBERP.Models.SyncfusionViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace BBERP.Controllers.Api
 {
@@ -20,18 +21,22 @@ namespace BBERP.Controllers.Api
     {
         private readonly ApplicationDbContext _context;
         private readonly INumberSequence _numberSequence;
-
+        private IConfiguration Configuration;
+        public string con = null;
         public BillController(ApplicationDbContext context,
-                        INumberSequence numberSequence)
+                        INumberSequence numberSequence, IConfiguration _configuration)
         {
             _context = context;
             _numberSequence = numberSequence;
+            Configuration = _configuration;
+            con = this.Configuration.GetConnectionString("DefaultConnection");
         }
 
         // GET: api/Bill
         [HttpGet]
         public async Task<IActionResult> GetBill()
         {
+             
             List<Bill> Items = await _context.Bill.ToListAsync();
             int Count = Items.Count();
             return Ok(new { Items, Count });

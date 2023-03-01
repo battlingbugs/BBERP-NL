@@ -13,16 +13,14 @@ namespace BBERP.Models
         [Required]
         public string MaterialName { get; set; }
         public string MaterialCode { get; set; }
-        public string Barcode { get; set; }
+        
         public string Description { get; set; }
-        public string MaterialImageUrl { get; set; }
-        [Display(Name = "UOM")]
-        public int UnitOfMeasureId { get; set; }
-        public double DefaultBuyingPrice { get; set; } = 0.0;
-        public double DefaultSellingPrice { get; set; } = 0.0;
+       
+        
+        public decimal GrossWt { get; set; }
+        
         [Display(Name = "Branch")]
         public int BranchId { get; set; }
-        [Display(Name = "Currency")]
-        public int CurrencyId { get; set; }
+       
     }
 }

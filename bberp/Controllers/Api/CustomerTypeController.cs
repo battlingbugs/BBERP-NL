@@ -9,6 +9,10 @@ using BBERP.Data;
 using BBERP.Models;
 using BBERP.Models.SyncfusionViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using bberp.Data;
+using System.Data.SqlClient;
 
 namespace BBERP.Controllers.Api
 {
@@ -18,17 +22,25 @@ namespace BBERP.Controllers.Api
     public class CustomerTypeController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public CustomerTypeController(ApplicationDbContext context)
+        private IConfiguration Configuration;
+        public string con = null;
+        SqlConnection conn;
+        public CustomerTypeController(ApplicationDbContext context, IConfiguration _configuration)
         {
             _context = context;
+            Configuration = _configuration;
+            con = this.Configuration.GetConnectionString("DefaultConnection");
+            conn = new SqlConnection(con);
         }
 
         // GET: api/CustomerType
         [HttpGet]
         public async Task<IActionResult> GetCustomerType()
         {
-            List<CustomerType> Items = await _context.CustomerType.ToListAsync();
+            DataTable dtcusttype = new DataTable();
+            
+            dtcusttype = Common.ExecuteDataTableSqlDA(conn, CommandType.StoredProcedure, "IM_GetCustType", null);
+            List<CustomerType> Items = Common.BindList<CustomerType>(dtcusttype);
             int Count = Items.Count();
             return Ok(new { Items, Count });
         }

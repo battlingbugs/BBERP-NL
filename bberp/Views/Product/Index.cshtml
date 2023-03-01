@@ -22,6 +22,7 @@
                 </div>
             </div>
             <div class="box-body">
+                
                 <div id="Grid"></div>
             </div>
             <!-- /.box-body -->
@@ -43,6 +44,7 @@
 @section Scripts{
 
     <script type="text/javascript">
+       
         $(function () {
 
             var dataManager = ej.DataManager({
@@ -51,10 +53,7 @@
                 offline: true
             });
 
-            var dataManagerUnitOfMeasure = ej.DataManager({
-                url: "/api/UnitOfMeasure",
-                adaptor: new ej.WebApiAdaptor()
-            });
+            
 
             var dataManagerBranch = ej.DataManager({
                 url: "/api/Branch",
@@ -97,18 +96,20 @@
                         enableCaseSensitivity: false
                     },
                     allowPaging: true,
+                    queryCellInfo: queryCellInfo,
                     pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
                     columns: [
                         { field: "ProductId", headerText: 'Product Id', isPrimaryKey: true, isIdentity: true, visible: false },
                         { field: "ProductName", headerText: 'Product Name', validationRules: { required: true } },
-                        { field: "UnitOfMeasureId", headerText: 'UOM', foreignKeyField: "UnitOfMeasureId", foreignKeyValue: "UnitOfMeasureName", dataSource: dataManagerUnitOfMeasure, validationRules: { required: true } },
-                        { field: "Barcode", headerText: 'Barcode', },
-                        { field: "Description", headerText: 'Description', },
-                        { field: "ProductImageUrl", headerText: 'ProductImageUrl', visible: false },
-                        { field: "DefaultBuyingPrice", headerText: 'Buying Price', editType: "numericedit", format: "{0:n2}" },
-                        { field: "DefaultSellingPrice", headerText: 'Selling Price', editType: "numericedit", format: "{0:n2}" },
+                        {
+                            field: "ProductImageUrl", headerText: 'Product Image', visible: true, template: '<img class="tempimg" />'
+
+
+                        },//template: generateimageTemplate(ej.dataSource.row)},
+                        //{ field: "GrossWt", headerText: 'UOM', foreignKeyField: "GrossWt", foreignKeyValue: "UnitOfMeasureName", dataSource: dataManagerUnitOfMeasure, validationRules: { required: true } },                        
+                        { field: "Description", headerText: 'Description', },                                             
                         { field: "BranchId", headerText: 'Branch', foreignKeyField: "BranchId", foreignKeyValue: "BranchName", dataSource: dataManagerBranch },
-                        { field: "CurrencyId", headerText: 'Currency', allowEditing: false, foreignKeyField: "CurrencyId", foreignKeyValue: "CurrencyCode", dataSource: dataManagerCurrency },
+                        { field: "GrossWt", headerText: 'Gross Wt.', allowEditing: true },
                     ],
                     actionComplete: "complete",
                 });
@@ -116,7 +117,14 @@
 
             
         });
-
+        function queryCellInfo(args) { // Grid queryCellInfo event handler
+            
+            //alert(args.data.ProductImageUrl);
+            if (args.column.field == "ProductImageUrl") {
+                args.cell.querySelector('img').setAttribute('src',  args.data.ProductImageUrl);
+            }
+        }
+        
         function complete(args) {
             if (args.requestType == 'beginedit') {
                 $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
@@ -125,7 +133,8 @@
                 $('#GridBranchId').ejDropDownList({ change: 'branchDdlChange' });
             }
         }
-
+        
+        
         function branchDdlChange(e) {
             $.ajax({
                 url: '/api/Currency/GetByBranchId/' + e.selectedValue,
